@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe</title>
+
+  <link rel='stylesheet' href='style.css'>
+  
+  <!--libraries-->
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+  <!-- <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
+  
+  <!--game scripts-->
+  <script src='tictactoe.js' type='text/javascript'></script>
+
+</head>
+<body>
+
+  <div class='container'>
+
+    <div class='board'>
+      <div class='cell'></div>
+      <div class='cell'></div>
+      <div class='cell'></div>
+      <div class='cell'></div>
+      <div class='cell'></div>
+      <div class='cell'></div>
+      <div class='cell'></div>
+      <div class='cell'></div>
+      <div class='cell'></div>
+    </div>
+
+    <div class='panel'>
+      <div class='button' id='newgame'></div>
+      <div class='button' id='player2'></div>
+    </div>
+
+    <table class='scoreboard'>
+      <tr>
+        <th>Player 1</th>
+        <th>Ties</th>
+        <th>Computer</th>
+      </tr>
+      <tr>
+        <td id='p1_wins'>0</td>
+        <td id='ties'>0</td>
+        <td id='p2_wins'>0</td>
+      </tr>
+    </table>
+
+    <div class='footer'>
+      (C) 2022 | <a href='https://www.github.com/stmorse'>Github</a>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
