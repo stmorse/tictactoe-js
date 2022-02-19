@@ -1,7 +1,7 @@
 :root {
   --border: 1px solid black;
-  --fontsize: 40pt;
-  --sqwidth: 150px;
+  --fontsize: min(40pt, 20vmin);
+  --sqwidth: min(150px, 30vmin);
 }
 
 * {
@@ -26,8 +26,9 @@
   width: 90%;
   height: 90%;
   margin: 5% auto;
-  background-color: white;
-  -o-transition:.5s;
+  font-size: var(--fontsize);
+  line-height: calc(.90 * var(--sqwidth));
+  -o-transition:.5s;   
   -ms-transition:.5s;
   -moz-transition:.5s;
   -webkit-transition:.5s;
@@ -43,16 +44,14 @@
   transition: .5s;
 }
 
-.selectable:hover {
-  background-color: rgba(200,200,200,0.3);
+@media (hover: hover) and (pointer: fine) {
+  .selectable:hover {
+    background-color: rgba(200,200,200,0.3);
+  }  
 }
 
-
 .cell {
-  font-family: sans-serif;
-  font-size: var(--fontsize);
   text-align: center;
-  line-height: var(--sqwidth);
 }
 
 .cell:nth-of-type(-n+3) {
@@ -108,8 +107,7 @@
 }
 
 th {
-  font-style: underline;
-  line-height: 40pt;
+  line-height: var(--fontsize);
 }
 
 tr {
