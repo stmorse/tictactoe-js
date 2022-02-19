@@ -82,10 +82,9 @@
   width: calc(var(--sqwidth) / 3);
   height: calc(var(--sqwidth) / 3);
   line-height: 100%;
-  border: 1px solid gray;
-  font-size: var(--fontsize);
+  font-size: 30pt;
   color: lightgray;
-  padding: 5px;
+  padding: 5px 20px 5px 20px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;

@@ -81,8 +81,6 @@ $(document).ready(function () {
 
 	var XS = '\u2573';
 	var OS = '\u25EF';
-	var newgame = '\u21BB';
-	var player2 = '\u2616';
 
 	var p1_wins = 0;
 	var p2_wins = 0;
@@ -94,7 +92,6 @@ $(document).ready(function () {
 	var gameOver = false;
 
 	// new game button
-	$('#newgame').text(newgame);
 	$('#newgame').click(function () {
 		// TODO: check if game not over, warn player
 
@@ -120,8 +117,6 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#player2').text(player2);
-
 	$('.cell').each(function(i) {
 		$(this).append(
 			// create inner cell and click event
@@ -146,6 +141,14 @@ $(document).ready(function () {
 					return;
 				}
 
+				// check cat's game
+				if (!board.some((e) => e==0)) {
+					ties += 1;
+					$('#ties').text(ties);
+					gameOver = true;
+					return;
+				}
+
 				// do computer move
 				// let r = getRandomMove(board, compy);
 				let r = getMinimaxMove(board, compy);
@@ -162,6 +165,14 @@ $(document).ready(function () {
 					setTimeout(function () {
 						$('#p2_wins').text(p2_wins);
 					}, 400);
+					gameOver = true;
+					return;
+				}
+
+				// check cat's game
+				if (!board.some((e) => e==0)) {
+					ties += 1;
+					$('#ties').text(ties);
 					gameOver = true;
 					return;
 				}
