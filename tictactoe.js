@@ -9,10 +9,10 @@ function checkWin(b) {
 			r += b[e];
 		}
 		if (Math.abs(r) == 3) {
-			return Math.sign(r)
+			return {'result': Math.sign(r), 'pattern': c};
 		}
 	}
-	return 0;
+	return {'result': 0, 'pattern': -1};
 }
 
 
@@ -79,6 +79,12 @@ function getMinimaxMove(b, p) {
 
 $(document).ready(function () {
 
+	// by construction, it is ALWAYS true that
+	// player1 == 1 == X
+	// player2 == -1 == O
+	// and on singleplayer, computer is ALWAYS player2
+	// only startingPlayer changes
+
 	var XS = '\u2573';
 	var OS = '\u25EF';
 
@@ -86,8 +92,11 @@ $(document).ready(function () {
 	var p2_wins = 0;
 	var ties = 0;
 
-	var human = 1;
-	var compy = -1;
+	var player1 = 1;
+	var player2 = -1;
+	var startingPlayer = player1;
+	var currentPlayer = player1;
+	var multiplayer = false;
 	var board = [0,0,0, 0,0,0, 0,0,0];
 	var gameOver = false;
 
@@ -95,7 +104,7 @@ $(document).ready(function () {
 	$('#newgame').click(function () {
 		// TODO: check if game not over, warn player
 
-		// clear board
+		// reset board
 		board = [0,0,0, 0,0,0, 0,0,0];
 		$('.xos').text('');
 		$('.xos').addClass('selectable');
@@ -103,19 +112,98 @@ $(document).ready(function () {
 		// reset gameOver bool
 		gameOver = false;
 
-		// swap players
-		let t = human;
-		human = compy;
-		compy = t;
+		// swap who starts
+		startingPlayer = startingPlayer == player1 ? player2 : player1;
 
-		// if compy is X, make computer move
-		if (compy == 1) {
-			let r = getRandomMove(board, compy);
-			board[r.spot] = compy;
+		// if playing compy, and compy is X, make computer move
+		if (!multiplayer && startingPlayer == player2) {
+			let r = getRandomMove(board, player2);
+			board[r.spot] = player2;
 			$('#' + r.spot).removeClass('selectable');
-			$('#' + r.spot).text(compy==1 ? XS : OS);
+			$('#' + r.spot).text(OS);
 		}
 	});
+
+	// switch single/multiplayer
+	$('#multiplayer').click(function () {
+		// reset board
+		board = [0,0,0, 0,0,0, 0,0,0];
+		$('.xos').text('');
+		$('.xos').addClass('selectable');
+
+		// reset gameOver bool
+		gameOver = false;
+
+		// reset wins and startingPlayer
+		p1_wins = 0;
+		p2_wins = 0;
+		$('#p1_wins').text(0);
+		$('#ties').text(0);
+		$('#p2_wins').text(0);
+		startingPlayer = player1;
+
+		// switch multiplayer on/off
+		multiplayer = multiplayer ? false : true;
+
+		// change score labels
+		$('#p1_name').text(multiplayer ? 'Player 1' : 'Human');
+		$('#p2_name').text(multiplayer ? 'Player 2' : 'Computer');	
+
+		// change icon
+		$(this).html('<i class="fa-solid fa-user' + (multiplayer ? '-group' : '') + '"></i>');
+		$(this).attr('title', 'Switch to ' + (multiplayer ? 'single ' : 'multi') + 'player');
+	});
+
+	// utility function to check and handle game over
+	function checkGameOver() {
+		// check win
+		let w = checkWin(board);
+		if (w == 1) {
+			p1_wins += 1;
+
+			// update text
+			$('#p1_wins').text(p1_wins);
+
+			// +1 animation
+			$('#p1p1').addClass('slide');
+			setTimeout(() => {
+				$('#p1p1').removeClass('slide')
+			}, 1000);
+		} else if (w == -1) {
+			p2_wins += 1;
+
+			// update scoreboard
+			$('#p2_wins').text(p2_wins);
+
+			// +1 animation
+			$('#p2p1').addClass('slide');
+			setTimeout(() => {
+				$('#p2p1').removeClass('slide')
+			}, 1000);
+		}
+
+		if (w != 0) {
+			gameOver = true;	
+			return;
+		}
+
+		// check cat's game
+		if (!board.some((e) => e==0)) {
+			ties += 1;
+			
+			// update scoreboard
+			$('#ties').text(ties);
+			
+			// +1 animation
+			$('#tp1').addClass('slide');
+			setTimeout(() => {
+				$('#tp1').removeClass('slide')
+			}, 1000);
+
+			gameOver = true;
+			return;
+		}
+	}
 
 	$('.cell').each(function(i) {
 		$(this).append(
@@ -128,53 +216,29 @@ $(document).ready(function () {
 				}
 
 				// update board
-				board[this.id] = human;
-				$(this).text(human==1 ? XS : OS);
+				board[this.id] = currentPlayer;
+				$(this).text(currentPlayer==1 ? XS : OS);
 				$(this).removeClass('selectable');
 
-				// check win
-				let w = checkWin(board);
-				if (w != 0) {
-					p1_wins += 1;
-					$('#p1_wins').text(p1_wins);
-					gameOver = true;
+				checkGameOver();
+
+				if (gameOver) {
 					return;
 				}
 
-				// check cat's game
-				if (!board.some((e) => e==0)) {
-					ties += 1;
-					$('#ties').text(ties);
-					gameOver = true;
-					return;
-				}
-
-				// do computer move
-				// let r = getRandomMove(board, compy);
-				let r = getMinimaxMove(board, compy);
-				board[r.spot] = compy;
-				$('#' + r.spot).removeClass('selectable');
-				setTimeout(function () {
-					$('#' + r.spot).text(compy==1 ? XS : OS);
-				}, 200);
-
-				// check win
-				w = checkWin(board);
-				if (w != 0) {
-					p2_wins += 1;
+				// if playing computer, do computer move
+				if (!multiplayer) {
+					let r = getMinimaxMove(board, player2);
+					board[r.spot] = player2;
+					$('#' + r.spot).removeClass('selectable');
 					setTimeout(function () {
-						$('#p2_wins').text(p2_wins);
-					}, 400);
-					gameOver = true;
-					return;
-				}
+						$('#' + r.spot).text(OS);  // computer is always O's
+					}, 200);
 
-				// check cat's game
-				if (!board.some((e) => e==0)) {
-					ties += 1;
-					$('#ties').text(ties);
-					gameOver = true;
-					return;
+					checkGameOver();
+				} else {
+					// change players
+					currentPlayer = currentPlayer == player1 ? player2 : player1;
 				}
 			})
 		);

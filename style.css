@@ -2,6 +2,7 @@
   --border: 1px solid black;
   --fontsize: min(40pt, 20vmin);
   --sqwidth: min(150px, 30vmin);
+  --theme-color: rgba(0, 0, 200, 0.5);
 }
 
 * {
@@ -91,10 +92,11 @@
   transition: .5s;
 }
 
-.button:hover {
-  color: black;
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    color: var(--theme-color);
+  }
 }
-
 
 .scoreboard {
   width: 100%;
@@ -112,6 +114,39 @@ th {
 
 tr {
   width: calc(100% / 3);
+}
+
+.plusone {
+  position: absolute;
+  visibility: hidden;
+  margin-left: calc(var(--sqwidth) / 2 - 25px); /* a little hacky - lines the digit up with current score */
+  width: 30px;
+  height: 30px;
+  background-color: var(--theme-color);
+  color: white;
+  text-align: center;
+  line-height: 30px;
+}
+
+.slide {
+  visibility: visible;
+  animation: slideup 1s linear;
+  opacity: 0;
+}
+
+@keyframes slideup {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-200%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-300%);
+  }
 }
 
 

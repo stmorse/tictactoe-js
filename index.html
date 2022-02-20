@@ -33,20 +33,28 @@
     </div>
 
     <div class='panel'>
-      <div class='button' id='newgame'><i class="fa-solid fa-arrow-rotate-right"></i></div>
-      <div class='button' id='player2'><i class="fa-solid fa-user-group"></i></div>
+      <div class='button' id='newgame' title='Reset board'><i class="fa-solid fa-arrow-rotate-right"></i></div>
+      <div class='button' id='multiplayer' title='Switch to multiplayer'><i class="fa-solid fa-user"></i></div>
     </div>
 
     <table class='scoreboard'>
       <tr>
-        <th>Player 1</th>
+        <th id='p1_name'>Human</th>
         <th>Ties</th>
-        <th>Computer</th>
+        <th id='p2_name'>Computer</th>
       </tr>
       <tr>
-        <td id='p1_wins'>0</td>
-        <td id='ties'>0</td>
-        <td id='p2_wins'>0</td>
+        <td class='stats'>
+          <span id='p1_wins'>0</span>
+          <div class='plusone' id='p1p1'>+1</div>
+        </td>
+        <td class='stats'>
+          <span id='ties'>0</span>
+          <div class='plusone' id='tp1'>+1</div></td>
+        <td class='stats'>
+          <span id='p2_wins'>0</span>
+          <div class='plusone' id='p2p1'>+1</div>
+        </td>
       </tr>
     </table>
 
