@@ -36,8 +36,8 @@ function getMinimaxMove(b, p) {
 
 	// check if win
 	let check = checkWin(b);
-	if (check != 0) {
-		res.value = check;
+	if (check.result != 0) {
+		res.value = check.result;
 		return res;
 	}
 
@@ -158,7 +158,7 @@ $(document).ready(function () {
 	function checkGameOver() {
 		// check win
 		let w = checkWin(board);
-		if (w == 1) {
+		if (w.result == 1) {
 			p1_wins += 1;
 
 			// update text
@@ -169,7 +169,7 @@ $(document).ready(function () {
 			setTimeout(() => {
 				$('#p1p1').removeClass('slide')
 			}, 1000);
-		} else if (w == -1) {
+		} else if (w.result == -1) {
 			p2_wins += 1;
 
 			// update scoreboard
@@ -180,9 +180,12 @@ $(document).ready(function () {
 			setTimeout(() => {
 				$('#p2p1').removeClass('slide')
 			}, 1000);
+
+			// tictactoe animation
+			// w.pattern
 		}
 
-		if (w != 0) {
+		if (w.result != 0) {
 			gameOver = true;	
 			return;
 		}
@@ -229,11 +232,14 @@ $(document).ready(function () {
 				// if playing computer, do computer move
 				if (!multiplayer) {
 					let r = getMinimaxMove(board, player2);
+					// let r = getRandomMove(board);
+					console.log(r);
 					board[r.spot] = player2;
 					$('#' + r.spot).removeClass('selectable');
 					setTimeout(function () {
 						$('#' + r.spot).text(OS);  // computer is always O's
 					}, 200);
+					console.log(board);
 
 					checkGameOver();
 				} else {

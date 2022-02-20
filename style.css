@@ -124,6 +124,7 @@ tr {
   height: 30px;
   background-color: var(--theme-color);
   color: white;
+  font-size: 15pt;
   text-align: center;
   line-height: 30px;
 }
